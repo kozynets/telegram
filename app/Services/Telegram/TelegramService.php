@@ -44,11 +44,13 @@ class TelegramService
     /**
      * @param int $leagueId
      * @param string $chatId
+     * @return int
      * @throws GuzzleException
      * @throws TelegramException
      */
-    public function sendNewMatchesInfo(int $leagueId, string $chatId): void
+    public function sendNewMatchesInfo(int $leagueId, string $chatId): int
     {
+        $resultSends = 0;
         $fullData = $this->footballDataService->getFullDataByLeague($leagueId);
         $dataToSend = $this->messageManager->getMatchesToPublish($fullData);
         foreach ($dataToSend as $matchDataDTO) {
@@ -58,6 +60,9 @@ class TelegramService
                 $this->messageManager->getFormattedMessageByMatchData($matchDataDTO)
             );
             $this->telegramSender->sendMessage($tgMessageDTO);
+            $resultSends++;
         }
+
+        return $resultSends;
     }
 }

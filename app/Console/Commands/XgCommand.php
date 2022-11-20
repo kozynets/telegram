@@ -34,11 +34,11 @@ class XgCommand extends Command
     public function handle()
     {
         try {
-            $this->telegramService->sendNewMatchesInfo(7432, getenv('TELEGRAM_CHAT_ID'));
+            $sendCount = $this->telegramService->sendNewMatchesInfo(7432, getenv('TELEGRAM_CHAT_ID'));
+            $this->info(sprintf('Sent %d messages', $sendCount));
 //            $this->telegramService->sendNewMatchesInfo(7704, '-1001859387810');
         } catch (\Throwable $e) {
-            var_dump($e->getMessage());
-            die();
+            $this->error($e->getMessage());
         }
 
         return Command::SUCCESS;
